@@ -59,9 +59,9 @@
     {
         # create Runspace
         Write-Debug ("creating runspace for powershell")
-        $sessionstate = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
-        $minPoolSize = $maxPoolSize = 50 # 50 runspaces
-        $runspacePool = [runspacefactory]::CreateRunspacePool($minPoolSize, $maxPoolSize,  $sessionstate, $Host) # create Runspace Pool
+        $private:sessionstate = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
+        $private:minPoolSize = $maxPoolSize = 50 # 50 runspaces
+        $private:runspacePool = [runspacefactory]::CreateRunspacePool($minPoolSize, $maxPoolSize,  $sessionstate, $Host) # create Runspace Pool
         $runspacePool.ApartmentState = "STA" # only STA mode supports
         $runspacePool.Open() # open pool
 
@@ -72,13 +72,13 @@
             Write-Debug ("start creating command for '{0}'" -f $url)
             $command = {
 
-                $url = $args[0]
-                $timestamp = $args[1]
-                $VerbosePreference = $args[2]
+                $private:url = $args[0]
+                $private:timestamp = $args[1]
+                $private:VerbosePreference = $args[2]
 
                 # change ErrorActionPreference
                 Write-Debug "set continue with error as http client requires dispose when method done."
-                $originalErrorActionPreference = $ErrorActionPreference
+                $private:originalErrorActionPreference = $ErrorActionPreference
                 $ErrorActionPreference = "Continue"
                 
                 # base settings for query
@@ -132,18 +132,18 @@
             Write-Debug "set VerbosePreference inside Asynchronous execution"
             if ($PSBoundParameters.Verbose.IsPresent)
             {
-                $verbose = "continue"
+                $private:verbose = "continue"
             }
             else
             {
-                $verbose = $VerbosePreference
+                $private:verbose = $VerbosePreference
             }
 
             # Main Invokation
             Write-Debug "start asynchronous invokation"
-            $powershell = [PowerShell]::Create().AddScript($command).AddArgument($url).AddArgument($timestamp).AddArgument($verbose)
+            $private:powershell = [PowerShell]::Create().AddScript($command).AddArgument($url).AddArgument($timestamp).AddArgument($verbose)
             $powershell.RunspacePool = $runspacePool
-            [array]$RunspaceCollection += New-Object -TypeName PSObject -Property @{
+            [array]$private:RunspaceCollection += New-Object -TypeName PSObject -Property @{
                 Runspace = $powershell.BeginInvoke();
                 powershell = $powershell
             }
@@ -162,7 +162,7 @@
         foreach ($runspace in $runspaceCollection)
         {
             # obtain Asynchronos command result
-            $task = $runspace.powershell.EndInvoke($runspace.Runspace)
+            $private:task = $runspace.powershell.EndInvoke($runspace.Runspace)
 
             # show result
             if ($task.IsCompleted)
@@ -170,7 +170,7 @@
                 # get reuslt
                 $private:result = ($task.Result | ConvertFrom-Json).archived_snapshots.closest
                 # create sorted hashtable to create object
-                $obj = [ordered]@{
+                $private:obj = [ordered]@{
                     available = $result.available
                     status = $result.status
                     timestamp = $result.timestamp
@@ -182,7 +182,9 @@
                 }
 
                 # create PSObject to output
-                $output = New-Object -TypeName PSObject -Property $obj
+                $private:output = New-Object -TypeName PSObject -Property $obj
+
+                # return result into host
                 $output
             }
 
