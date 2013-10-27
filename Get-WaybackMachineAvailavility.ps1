@@ -2,7 +2,7 @@
 {
 <#
 .Synopsis
-   Get serachUri status of Wayback Machine had been available
+   Synchronous Get serachUri status of Wayback Machine.
 
 .DESCRIPTION
    This simple API for Wayback is a test to see if a given url is archived and currenlty accessible in the Wayback Machine.
@@ -25,8 +25,12 @@
    Get-WaybackMachineAvailavility -url http://neue.cc -timestamp 20060101 -Verbose
 
 .EXAMPLE
+   # check status for multiple uri
+   Get-WaybackMachineAvailavility -urls "http://tech.guitarrapc.com","http://neue.cc","http://gitHub.com","http://google.com"
+
+.EXAMPLE
    # check status for multiple uri recieved from pipeline
-   "http://tech.guitarrapc.com","http://neue.cc" | Get-WaybackMachineAvailavility
+   "http://tech.guitarrapc.com","http://neue.cc","http://gitHub.com","http://google.com" | Get-WaybackMachineAvailavility
 
 .EXAMPLE
    # check status for multiple uri recieved from pipeline and show as table view (default list view)
@@ -45,16 +49,20 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName,
             Position=0)]
-        [string]
-        $url,
+        [string[]]
+        $urls,
 
 
-        # Input timestamp to obtain closed date you want. Make sure as format 1-14 digits of 'yyyyMMddHHmmss' or 'yyyy' or 'yyyyMM' or 'yyyyMMdd' or else.('2006' will tring to obtain closed to 2006)
+        # Input timestamp to obtain closed date you want. Make sure as format 'yyyyMMddHHmmss' or 'yyyy' or 'yyyyMM' or 'yyyyMMdd' or else.('2006' will tring to obtain closed to 2006)
         [Parameter(
             Mandatory = 0,
             Position=1)]
         [string]
-        $timestamp
+        $timestamp,
+
+        # Invoke request with async
+        [switch]
+        $async
     )
 
     Begin
@@ -63,46 +71,49 @@
         $private:baseUri = "http://archive.org/wayback/available"
         $private:baseQuery = "?url="
         $private:timestampQuery = "&timestamp="
-        $private:executeCount = 0
     }
     Process
     {
-        # build query
-        $executeCount++
-        $private:trimBaseQuery = $url | where {$_}
-        $private:query = $baseQuery + $trimBaseQuery
+        foreach($url in $urls)
+        {
+            # build query
+            $private:query = "$baseQuery{0}" -f $url | where {$_}
 
-            # validate timestamp parameter for query
-            if (-not [string]::IsNullOrWhiteSpace($PSBoundParameters.timestamp))
-            {
-                $private:trimTimestampQuery = $PSBoundParameters.timestamp | where {$_}
-                $private:query = $query + $timestampQuery + $trimTimestampQuery
+                # validate timestamp parameter for query
+                if (-not [string]::IsNullOrWhiteSpace($PSBoundParameters.timestamp))
+                {
+                    $private:trimTimestampQuery = $PSBoundParameters.timestamp | where {$_}
+                    $private:query = "$query{0}{1}" -f $timestampQuery, $trimTimestampQuery
+                }
+
+            # build query uri
+            $private:queryUri = (@($baseUri,$query) | where { $_ } | % { ([string]$_).Trim('/') } | where { $_ } ) -join '/'
+
+            # invoke request
+            Write-Verbose ("trying to collect availability of Wayback Time machine for uri '{0}' from API '{1}'" -f $url, $baseUri)
+            Write-Verbose ("Whole query string '{0}'" -f $queryUri)
+
+            # using Invoke-RestMethod
+            $private:task = Invoke-RestMethod -Method Get -Uri $queryUri -UserAgent ("PowerShell {0}" -f $PSVersionTable.PSVersion)
+
+            # get reuslt
+            $private:result =  $task.archived_snapshots.closest
+
+            # create sorted hashtable to create object
+            $obj = [ordered]@{
+                available = $result.available
+                status = $result.status
+                timestamp = $result.timestamp
+                url = $result.url
+                queryInformation = @{
+                    url = $url
+                    queryUri = $queryUri
+                }
             }
 
-        # build query uri
-        $private:queryUri = (@($baseUri,$query) | where { $_ } | % { ([string]$_).Trim('/') } | where { $_ } ) -join '/'
-
-        # invoke webrequest
-        Write-Verbose ("trying to collect availability of Wayback Time machine for uri '{0}' from API '{1}'" -f $url, $baseUri)
-        Write-Verbose ("Whole query string '{0}'" -f $queryUri)
-        $private:apiAnswer = Invoke-WebRequest -Uri $queryUri -UserAgent ("PowerShell {0}" -f $PSVersionTable.PSVersion)
-        $result = ($apiAnswer.Content | ConvertFrom-Json).archived_snapshots.closest
-
-        # create sorted hashtable to create object
-        $obj = [ordered]@{
-            executeCount = $executeCount
-            available = $result.available
-            status = $result.status
-            timestamp = $result.timestamp
-            url = $result.url
-            queryInformation = @{
-                url = $url
-                queryUri = $queryUri
-            }
+            # create PSObject to output
+            $output = New-Object -TypeName PSObject -Property $obj
+            $output
         }
-
-        # create PSObject to output
-        New-Object -TypeName PSObject -Property $obj
-
     }
 }
