@@ -57,11 +57,6 @@
 
     try
     {
-        # change ErrorActionPreference
-        Write-Debug "set continue with error as http client requires dispose when method done."
-        $originalErrorActionPreference = $ErrorActionPreference
-        $ErrorActionPreference = "Continue"
-
         # create Runspace
         Write-Debug ("creating runspace for powershell")
         $sessionstate = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
@@ -80,6 +75,11 @@
                 $url = $args[0]
                 $timestamp = $args[1]
                 $VerbosePreference = $args[2]
+
+                # change ErrorActionPreference
+                Write-Debug "set continue with error as http client requires dispose when method done."
+                $originalErrorActionPreference = $ErrorActionPreference
+                $ErrorActionPreference = "Continue"
                 
                 # base settings for query
                 $private:baseUri = "http://archive.org/wayback/available"
@@ -117,7 +117,15 @@
                 Write-Verbose ("Whole query string '{0}'" -f $queryUri)
                 $private:task = $httpClient.GetStringAsync($queryUri)
                 $task.wait()
-                return $task
+                
+                # return result
+                $task
+
+                # dispose HttpClient
+                $httpClient.Dispose()
+
+                # reverse ErrorActionPreference
+                $ErrorActionPreference = $originalErrorActionPreference
             }
 
             # Verbose settings for Async Command inside
