@@ -57,8 +57,8 @@ Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://n
 Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://neue.cc"
 ```
 
-you can use pipeline to pass multiple url at once for ```Get-WaybackMachineAvailavility```
-```Get-WaybackMachineAvailavilityAsync``` and ```Get-WaybackMachineAvailavilityParallel``` not supporting pipeling input.
+You can use pipeline to pass multiple url at once for ```Get-WaybackMachineAvailavility```.
+However ```Get-WaybackMachineAvailavilityAsync``` and ```Get-WaybackMachineAvailavilityParallel``` not supporting pipeling input.
 
 ```Powershell
 # Synchronous pipeline invokation
@@ -77,8 +77,17 @@ Make sure ```timestamp``` format as 1-14 digits of 'yyyyMMddHHmmss' or 'yyyy' or
 
 ```PowerShell
 # Synchronous invokation with 20060101
-Get-WaybackMachineAvailavility -url http://neue.cc -timestamp 20060101 -Verbose
+Get-WaybackMachineAvailavility -url http://neue.cc -timestamp 20060101
+
+# Asynchronous invokation
+Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://neue.cc" -timestamp 20060101
+
+# Parallel invokation
+Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://neue.cc" -timestamp 20060101
 ```
 
 this may result closed to ```timestamp``` date "20060101".
 
+#### common parameter
+
+You can use Common parameters like ``Verbose```, defined by ```[CmdletBinding()]
