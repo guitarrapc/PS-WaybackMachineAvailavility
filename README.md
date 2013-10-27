@@ -20,19 +20,33 @@ You can use ```urls``` and ```timestamp``` parameter.
 Abount ```Cmdlet```
 =============================
 
+## Summary
+
+Here's chart for easy understanding.
+
+|Cmdlet|pipeline input|mode|
+|----|----|----|
+|Get-WaybackMachineAvailavility|O|Synchronous|
+|Get-WaybackMachineAvailavilityAsync|X|Aynchronous|
+|Get-WaybackMachineAvailavilityPrallel|X|Parallel|
+
 #### Synchronous Cmdlet
 
 You can use ```Get-WaybackMachineAvailavility```.
+
 This supports pipeline input, but synchronous cmdlet may prefer for only small number of urls. (single or less then 5)
+
 
 #### Asynchronous Cmdlet
 
 You can use ```Get-WaybackMachineAvailavilityAsync```.
+
 This doesn't supports pipeline input, but Asynchronous execute for each url. This prefer for large number of urls. (more than 10)
 
 #### Parallel Cmdlet
 
 You can use ```Get-WaybackMachineAvailavilityParallel```.
+
 This doesn't supports pipeline input, but Parallel execute for each url. This prefer for medium number of urls. (less than 10)
 
 
