@@ -24,31 +24,36 @@ Abount ```Cmdlet```
 
 Here's chart for easy understanding.
 
-|Cmdlet|pipeline input|mode|
-|----|:----:|----|
-|Get-WaybackMachineAvailavility|O|Synchronous|
-|Get-WaybackMachineAvailavilityAsync|X|Aynchronous|
-|Get-WaybackMachineAvailavilityPrallel|X|Parallel|
+|Cmdlet|pipeline input|mode|PreferUrlCount|
+|----|:----:|----|:----:|
+|Get-WaybackMachineAvailavility|O|Synchronous|urls < 5|
+|Get-WaybackMachineAvailavilityAsync|X|Aynchronous|urls >= 10|
+|Get-WaybackMachineAvailavilityPrallel|X|Parallel|urls < 10|
 
 #### Synchronous Cmdlet
 
 You can use ```Get-WaybackMachineAvailavility```.
 
-This supports pipeline input, but synchronous cmdlet may prefer for only small number of urls. (single or less then 5)
+- Supports pipeline input.
+- Synchronous cmdlet may prefer for only small number of urls. 
+- target will be single or less then 5
 
 
 #### Asynchronous Cmdlet
 
 You can use ```Get-WaybackMachineAvailavilityAsync```.
 
-This doesn't supports pipeline input, but Asynchronous execute for each url. This prefer for large number of urls. (more than 10)
+- Doesn't supports pipeline input.
+- Asynchronous execute for each url. Prefer for large number of urls. 
+- target will be more than 10
 
 #### Parallel Cmdlet
 
 You can use ```Get-WaybackMachineAvailavilityParallel```.
 
-This doesn't supports pipeline input, but Parallel execute for each url. This prefer for medium number of urls. (less than 10)
-
+- Doesn't supports pipeline input
+- Parallel execute for each url. Prefer for medium number of urls.
+- target will be less than 10
 
 About ```Parameters```
 =============================
