@@ -25,7 +25,7 @@ Abount ```Cmdlet```
 Here's chart for easy understanding.
 
 |Cmdlet|pipeline input|mode|
-|----|----|----|
+|----|:----:|----|
 |Get-WaybackMachineAvailavility|O|Synchronous|
 |Get-WaybackMachineAvailavilityAsync|X|Aynchronous|
 |Get-WaybackMachineAvailavilityPrallel|X|Parallel|
@@ -104,4 +104,4 @@ this may result closed to ```timestamp``` date "20060101".
 
 #### common parameter
 
-You can use Common parameters like ``Verbose```, defined by ```[CmdletBinding()]
+You can use Common parameters defined by ```[CmdletBinding()], like ```Verbose``` switch.
