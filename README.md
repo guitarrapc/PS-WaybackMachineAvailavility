@@ -73,7 +73,7 @@ Get-WaybackMachineAvailavility -urls "http://tech.guitarrapc.com","http://neue.c
 Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://neue.cc"
 
 # Parallel invokation
-Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://neue.cc"
+Get-WaybackMachineAvailavilityParallel -urls "http://tech.guitarrapc.com","http://neue.cc"
 ```
 
 You can use pipeline to pass multiple url at once for ```Get-WaybackMachineAvailavility```.
@@ -102,7 +102,7 @@ Get-WaybackMachineAvailavility -url http://neue.cc -timestamp 20060101
 Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://neue.cc" -timestamp 20060101
 
 # Parallel invokation
-Get-WaybackMachineAvailavilityAsync -urls "http://tech.guitarrapc.com","http://neue.cc" -timestamp 20060101
+Get-WaybackMachineAvailavilityParallel -urls "http://tech.guitarrapc.com","http://neue.cc" -timestamp 20060101
 ```
 
 this may result closed to ```timestamp``` date "20060101".
