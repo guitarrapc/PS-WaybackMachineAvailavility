@@ -71,24 +71,24 @@
         {
             Write-Debug ("start creating command for '{0}'" -f $url)
             $command = {
+                [CmdletBinding()]
                 param
                 (
-                    [CmdletBinding()]
                     [parameter(
-                        mandatory=1,
-                        position=0)]
+                        mandatory,
+                        position = 0)]
                     [string]
                     $url,
 
                     [parameter(
-                        mandatory=0,
-                        position=1)]
+                        mandatory = 0,
+                        position = 1)]
                     [int]
                     $timestamp,
 
                     [parameter(
-                        mandatory=0,
-                        position=2)]
+                        mandatory = 0,
+                        position = 2)]
                     [string]
                     $VerbosePreference
                 )
