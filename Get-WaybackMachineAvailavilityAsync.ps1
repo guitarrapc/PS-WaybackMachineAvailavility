@@ -71,10 +71,27 @@
         {
             Write-Debug ("start creating command for '{0}'" -f $url)
             $command = {
+                param
+                (
+                    [CmdletBinding()]
+                    [parameter(
+                        mandatory=1,
+                        position=0)]
+                    [string]
+                    $url,
 
-                $private:url = $args[0]
-                $private:timestamp = $args[1]
-                $private:VerbosePreference = $args[2]
+                    [parameter(
+                        mandatory=0,
+                        position=1)]
+                    [int]
+                    $timestamp,
+
+                    [parameter(
+                        mandatory=0,
+                        position=2)]
+                    [string]
+                    $VerbosePreference
+                )
 
                 # change ErrorActionPreference
                 Write-Debug "set continue with error as http client requires dispose when method done."
