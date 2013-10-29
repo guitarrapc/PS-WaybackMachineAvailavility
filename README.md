@@ -17,7 +17,7 @@ This Cmdlet supports API for "Wayback Availability JSON API".
 You can use ```urls``` and ```timestamp``` parameter.
 
 
-Abount ```Cmdlet```
+Abount Cmdlet
 =============================
 
 ## Summary
@@ -25,7 +25,7 @@ Abount ```Cmdlet```
 Here's chart for easy understanding.
 
 |Cmdlet|pipeline input|mode|PreferUrlCount|
-|----|:----:|----|:----:|
+|----|:----:|:----:|:----:|
 |Get-WaybackMachineAvailavility|O|Synchronous|urls < 5|
 |Get-WaybackMachineAvailavilityAsync|X|Aynchronous|urls >= 10|
 |Get-WaybackMachineAvailavilityPrallel|X|Parallel|urls < 10|
@@ -55,7 +55,7 @@ You can use ```Get-WaybackMachineAvailavilityParallel```.
 - Parallel execute for each url. Prefer for medium number of urls.
 - target will be less than 10
 
-About ```Parameters```
+About Parameters
 =============================
 
 All cmdlet supports same parameters.
