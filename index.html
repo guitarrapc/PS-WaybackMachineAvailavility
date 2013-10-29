@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ps-waybackmachineavailavility : PowerShell function to obtain Wayback Machine Availavility from Wayback Machine APIs" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ps-waybackmachineavailavility</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/guitarrapc/PS-WaybackMachineAvailavility">View on GitHub</a>
+
+          <h1 id="project_title">Ps-waybackmachineavailavility</h1>
+          <h2 id="project_tagline">PowerShell function to obtain Wayback Machine Availavility from Wayback Machine APIs</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/guitarrapc/PS-WaybackMachineAvailavility/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/guitarrapc/PS-WaybackMachineAvailavility/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="readme" class="anchor" href="#readme"><span class="octicon octicon-link"></span></a>ReadMe</h1>
+
+<h4>
+<a name="what-is-this" class="anchor" href="#what-is-this"><span class="octicon octicon-link"></span></a>what is this?</h4>
+
+<p>PowerShell function to obtain Wayback Machine Availavility from Wayback Machine APIs</p>
+
+<h4>
+<a name="api-details" class="anchor" href="#api-details"><span class="octicon octicon-link"></span></a>API details</h4>
+
+<p>Refer following API information.</p>
+
+<blockquote>
+<p><a href="http://archive.org/help/wayback_api.php">Wayback Machine APIs</a></p>
+</blockquote>
+
+<h4>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h4>
+
+<p>This Cmdlet supports API for "Wayback Availability JSON API".</p>
+
+<p>You can use <code>urls</code> and <code>timestamp</code> parameter.</p>
+
+<h1>
+<a name="abount-cmdlet" class="anchor" href="#abount-cmdlet"><span class="octicon octicon-link"></span></a>Abount <code>Cmdlet</code>
+</h1>
+
+<h2>
+<a name="summary" class="anchor" href="#summary"><span class="octicon octicon-link"></span></a>Summary</h2>
+
+<p>Here's chart for easy understanding.</p>
+
+<table>
+<thead><tr>
+<th>Cmdlet</th>
+<th align="center">pipeline input</th>
+<th>mode</th>
+<th align="center">PreferUrlCount</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Get-WaybackMachineAvailavility</td>
+<td align="center">O</td>
+<td>Synchronous</td>
+<td align="center">urls &lt; 5</td>
+</tr>
+<tr>
+<td>Get-WaybackMachineAvailavilityAsync</td>
+<td align="center">X</td>
+<td>Aynchronous</td>
+<td align="center">urls &gt;= 10</td>
+</tr>
+<tr>
+<td>Get-WaybackMachineAvailavilityPrallel</td>
+<td align="center">X</td>
+<td>Parallel</td>
+<td align="center">urls &lt; 10</td>
+</tr>
+</tbody>
+</table><h4>
+<a name="synchronous-cmdlet" class="anchor" href="#synchronous-cmdlet"><span class="octicon octicon-link"></span></a>Synchronous Cmdlet</h4>
+
+<p>You can use <code>Get-WaybackMachineAvailavility</code>.</p>
+
+<ul>
+<li>Supports pipeline input.</li>
+<li>Synchronous cmdlet may prefer for only small number of urls. </li>
+<li>target will be single or less then 5</li>
+</ul><h4>
+<a name="asynchronous-cmdlet" class="anchor" href="#asynchronous-cmdlet"><span class="octicon octicon-link"></span></a>Asynchronous Cmdlet</h4>
+
+<p>You can use <code>Get-WaybackMachineAvailavilityAsync</code>.</p>
+
+<ul>
+<li>Doesn't supports pipeline input.</li>
+<li>Asynchronous execute for each url. Prefer for large number of urls. </li>
+<li>target will be more than 10</li>
+</ul><h4>
+<a name="parallel-cmdlet" class="anchor" href="#parallel-cmdlet"><span class="octicon octicon-link"></span></a>Parallel Cmdlet</h4>
+
+<p>You can use <code>Get-WaybackMachineAvailavilityParallel</code>.</p>
+
+<ul>
+<li>Doesn't supports pipeline input</li>
+<li>Parallel execute for each url. Prefer for medium number of urls.</li>
+<li>target will be less than 10</li>
+</ul><h1>
+<a name="about-parameters" class="anchor" href="#about-parameters"><span class="octicon octicon-link"></span></a>About <code>Parameters</code>
+</h1>
+
+<p>All cmdlet supports same parameters.</p>
+
+<h4>
+<a name="urls-parameter" class="anchor" href="#urls-parameter"><span class="octicon octicon-link"></span></a><code>urls</code> parameter</h4>
+
+<p>Input available urls to check whether "Wayback Machine" is availeble.
+multiple urls will be operate for each url inside cmdlet.</p>
+
+<div class="highlight highlight-PowerShell"><pre><span class="c"># Synchronous invokation</span>
+<span class="nb">Get-WaybackMachineAvailavility</span> <span class="n">-urls</span> <span class="s2">"http://tech.guitarrapc.com"</span><span class="p">,</span><span class="s2">"http://neue.cc"</span>
+
+<span class="c"># Asynchronous invokation</span>
+<span class="nb">Get-WaybackMachineAvailavilityAsync</span> <span class="n">-urls</span> <span class="s2">"http://tech.guitarrapc.com"</span><span class="p">,</span><span class="s2">"http://neue.cc"</span>
+
+<span class="c"># Parallel invokation</span>
+<span class="nb">Get-WaybackMachineAvailavilityParallel</span> <span class="n">-urls</span> <span class="s2">"http://tech.guitarrapc.com"</span><span class="p">,</span><span class="s2">"http://neue.cc"</span>
+</pre></div>
+
+<p>You can use pipeline to pass multiple url at once for <code>Get-WaybackMachineAvailavility</code>.
+However <code>Get-WaybackMachineAvailavilityAsync</code> and <code>Get-WaybackMachineAvailavilityParallel</code> not supporting pipeling input.</p>
+
+<div class="highlight highlight-Powershell"><pre><span class="c"># Synchronous pipeline invokation</span>
+<span class="s2">"http://tech.guitarrapc.com"</span><span class="p">,</span><span class="s2">"http://neue.cc"</span> <span class="p">|</span> <span class="nb">Get-WaybackMachineAvailavility</span>
+</pre></div>
+
+<p>If invalid url was passed, then API returns null.</p>
+
+<h4>
+<a name="timestamp-parameter" class="anchor" href="#timestamp-parameter"><span class="octicon octicon-link"></span></a><code>timestamp</code> parameter</h4>
+
+<p>Additional options which may be specified are <code>timestamp</code></p>
+
+<p>Timestamp is the timestamp to look up in Wayback. If not specified, the most recenty available capture in Wayback is returned.</p>
+
+<p>Make sure <code>timestamp</code> format as 1-14 digits of 'yyyyMMddHHmmss' or 'yyyy' or 'yyyyMM' or 'yyyyMMdd' or else.('2006' will tring to obtain closed to 2006)</p>
+
+<div class="highlight highlight-PowerShell"><pre><span class="c"># Synchronous invokation with 20060101</span>
+<span class="nb">Get-WaybackMachineAvailavility</span> <span class="n">-url</span> <span class="n">http</span><span class="err">:</span><span class="p">//</span><span class="n">neue</span><span class="p">.</span><span class="n">cc</span> <span class="n">-timestamp</span> <span class="n">20060101</span>
+
+<span class="c"># Asynchronous invokation</span>
+<span class="nb">Get-WaybackMachineAvailavilityAsync</span> <span class="n">-urls</span> <span class="s2">"http://tech.guitarrapc.com"</span><span class="p">,</span><span class="s2">"http://neue.cc"</span> <span class="n">-timestamp</span> <span class="n">20060101</span>
+
+<span class="c"># Parallel invokation</span>
+<span class="nb">Get-WaybackMachineAvailavilityParallel</span> <span class="n">-urls</span> <span class="s2">"http://tech.guitarrapc.com"</span><span class="p">,</span><span class="s2">"http://neue.cc"</span> <span class="n">-timestamp</span> <span class="n">20060101</span>
+</pre></div>
+
+<p>this may result closed to <code>timestamp</code> date "20060101".</p>
+
+<h4>
+<a name="common-parameter" class="anchor" href="#common-parameter"><span class="octicon octicon-link"></span></a>common parameter</h4>
+
+<p>You can use Common parameters defined by <code>[CmdletBinding()]</code> , like <code>Verbose</code> switch.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ps-waybackmachineavailavility maintained by <a href="https://github.com/guitarrapc">guitarrapc</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
